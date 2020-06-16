@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project basedir="." default="build">
+	<property name="name" value="love-report"/>
+	<property name="base.dir" value="."/>
+	<property name="appserver.dir" value="C:\Program Files\eclipse\pleiades\tomcat\6"/>
+	<property name="deploy.dir" value="${appserver.dir}/webapps"/>
+	<property name="src.dir" value="${base.dir}/WEB-INF/src"/>
+
+	<property name="build.dir" value="${base.dir}/WEB-INF/classes"/>
+
+	<path id="master-classpath">
+		<fileset dir="${base.dir}/WEB-INF/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${appserver.dir}/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement path="${build.dir}"/>
+	</path>
+
+	<target name="build" description="Complie main source tree java files">
+		<mkdir dir="${build.dir}"/>
+		<javac destdir="${build.dir}" debug="true" failonerror="true">
+			<src path="${src.dir}"/>
+			<classpath refid="master-classpath"/>
+		</javac>
+	</target>
+
+	<target name="deploy" depends="build" description="Deploy Application">
+		<copy todir="${deploy.dir}/${name}" preservelastmodified="true">
+			<fileset dir="${base.dir}">
+				<include name="**/*.*"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="clean">
+		<delete failonerror="false">
+			<fileset dir="${build.dir}">
+				<include name="**.*.class"/>
+				<include name="**.*.properties"/>
+			</fileset>
+		</delete>
+	</target>
+
+</project>
